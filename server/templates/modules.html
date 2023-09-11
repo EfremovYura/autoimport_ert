@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Autoimport</title>
+    <style type="text/css">
+        TABLE {
+         border-collapse: collapse;
+        }
+        TD, TH {
+         padding: 3px; border: 1px solid black;
+        }
+        TD {
+         text-align: start ;
+        }
+    </style>
+</head>
+<body>
+<h1>Информация по доступным функциям:</h1>
+
+<table>
+    <tr>
+        <th> Модуль</th>
+        <th> Функция</th>
+        <th> Описание</th>
+        <th> Код</th>
+    </tr>
+    {% for module in modules %}
+    {% for func in module.functions %}
+    <tr>
+        <td> {{ module.name }}</td>
+        <td> {{ func.name }}</td>
+        <td>
+            <div style="white-space: pre-wrap">{{ func.description|safe }}</div>
+        </td>
+        <td>
+            <div style="white-space: pre-wrap">{{ func.code|safe }}</div>
+        </td>
+
+    </tr>
+    {% endfor %}
+    {% endfor %}
+</table>
+
+</body>
+</html>
