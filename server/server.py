@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request
 from utils import get_info, get_module_path, is_file_exist, get_module_functions_names, execute_function
-from config import MODULES_PATH, SERVER_HOST, SERVER_PORT, DEBUG_MODE
+from config import MODULES_PATH, SERVER_HOST, SERVER_PORT, SERVER_POST_ROUTE, SERVER_GET_ROUTE, DEBUG_MODE
 
 app = Flask(__name__, template_folder="templates")
 
 
-@app.route("/html/", methods=['get'])
+@app.route(f"/{SERVER_GET_ROUTE}/", methods=['get'])
 def get_all():
     """Показать доступные модули и функции."""
     data = get_info(MODULES_PATH)
@@ -13,7 +13,7 @@ def get_all():
     return render_template('modules.html', modules=data)
 
 
-@app.route("/json/", methods=['post'])
+@app.route(f"/{SERVER_POST_ROUTE}/", methods=['post'])
 def post_json():
     """Загрузить данные пользователя."""
     try:

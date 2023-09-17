@@ -100,7 +100,7 @@ def get_module_functions_names(file_path: str) -> list[str]:
     """Получить список имен функций из файла."""
 
     with open(file_path, 'r', encoding='utf-8') as f:
-        func_names = [parse_function_name(line) for line in f.readlines()]
+        func_names = [parse_function_name(line) for line in f.readlines() if line.startswith('def')]
 
     return func_names
 

@@ -1,14 +1,18 @@
 import requests
 from json.decoder import JSONDecodeError
 import argparse
-from config import URL, DATA_FILE_NAME
+from config import DATA_FILE_NAME, SERVER_HOST, SERVER_PORT, SERVER_POST_ROUTE
 from utils import load_data
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--url", type=str, default=URL)
+
+def main(args=None):
+    """JSON post клиент."""
+
+    parser = argparse.ArgumentParser(description="Клиент для post запросов с json данными.")
+    parser.add_argument("--url", type=str,
+                        default=f'http://{SERVER_HOST}:{SERVER_PORT}/{SERVER_POST_ROUTE}')
     parser.add_argument("--file", type=str, default=DATA_FILE_NAME)
-    client_args = parser.parse_args()
+    client_args = parser.parse_args(args)
 
     url = client_args.url
     file_name = client_args.file
@@ -16,16 +20,18 @@ if __name__ == "__main__":
     try:
         data = load_data(file_name)
     except JSONDecodeError as e:
-        print(f"Не корректный формат json файла. Выполнение завершилось с ошибкой: \n {e}.")
-        exit(255)
+        return f"Не корректный формат json файла. Выполнение завершилось с ошибкой: \n {e}."
 
-    if str(url).rstrip('/').endswith('/json'):
+    try:
         result = requests.post(url, json=data)
-    else:
-        print(f'Unknown url: {url}')
-        exit(255)
+    except Exception as e:
+        return f'Connection error: {e}'
 
     if result.ok:
-        print(result.json())
+        return result.json()
     else:
-        print(result.status_code, result.text)
+        return result.status_code, result.text
+
+
+if __name__ == "__main__":
+    print(main())
